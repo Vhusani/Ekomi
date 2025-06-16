@@ -1,0 +1,74 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 mb-5">
+            <select [disabled]="isLoading" class="form-select form-select-sm" [(ngModel)]="selectedStatus"
+                (change)="filterOrders()">
+                <option value="0">Show All</option>
+                <option value="1">Pending</option>
+                <option value="2">Processing</option>
+                <option value="3">Shipped</option>
+                <option value="5">Cancelled</option>
+            </select>
+        </div>
+    </div>
+    <table class="table table-striped" *ngIf="!isLoading">
+        <thead>
+            <tr>
+                <th scope="col" sortable="name">ID</th>
+                <th scope="col" sortable="area">Status</th>
+                <th scope="col" sortable="population">Total</th>
+                <th scope="col" sortable="population">Order Date</th>
+                <th scope="col" sortable="population"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let order of paginatedOrders; let i = index">
+                <th scope="row">#{{ order.PID || i + 1 }}</th>
+                <td>
+                    <span *ngIf="order?.OrderStatus == 1" class="badge bg-success text-dark text-white">Pending</span>
+                    <span *ngIf="order?.OrderStatus == 2"
+                        class="badge bg-success text-dark text-white">Processing</span>
+                    <span *ngIf="order?.OrderStatus == 3" class="badge bg-info text-dark text-white">Shipped</span>
+                    <span *ngIf="order?.OrderStatus == 4" class="badge bg-success text-dark text-white">Paid</span>
+                    <span *ngIf="order?.OrderStatus == 5" class="badge bg-danger text-dark text-white">Cancelled</span>
+                </td>
+                <td>
+                    R{{order.OrderTotal}}
+                </td>
+                <td>
+                    {{order.DateCreated | date }}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-info mx-2 text-white"
+                        (click)="GoToOrderDetails(order.OrderId)">Manage</button>
+                    <button [disabled]="order.OrderStatus == 4" class="btn btn-sm btn-success"
+                        (click)="MarkOrderAsPaid(order.OrderId, 4)">Mark as paid</button>
+                </td>
+            </tr>
+            <tr *ngIf="!paginatedOrders || paginatedOrders.length === 0">
+                <td colspan="4" style="text-align: center">No orders found</td>
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="!isLoading" class="d-flex justify-content-between p-2">
+        <ngb-pagination [collectionSize]="filteredOrders.length" [(page)]="page" [pageSize]="pageSize">
+        </ngb-pagination>
+    </div>
+    <div class="row" *ngIf="!isLoading">
+        <div class="col-md-4">
+            <tr>
+                <td colspan="5">
+                    Total Items: {{TotalOrderItem}}<br>
+                    Grand total: R{{TotalOrderAmount}}
+                </td>
+            </tr>
+        </div>
+    </div>
+    <div *ngIf="isLoading">
+        <div class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+    </div>
+</div>

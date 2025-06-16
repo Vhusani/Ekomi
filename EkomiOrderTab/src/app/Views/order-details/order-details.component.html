@@ -1,0 +1,50 @@
+<div class="container">
+    <button class="btn btn-md btn-warning mb-4" (click)="GoToOrders()">Back to orders</button>
+    <div *ngIf="!isLoading">
+        <div class="card mb-2" *ngIf="Order">
+            <div class="card-body shadow">
+                <div class="row">
+                    <div class="col-md-12">
+                        Order <strong>#{{Order.PID}}</strong> <br>
+                        Date <strong>{{Order.DateCreated | date}}</strong><br>
+                        <span *ngIf="Order?.OrderStatus == 1" class="badge bg-success text-dark text-white">Pending</span>
+                        <span *ngIf="Order?.OrderStatus == 2" class="badge bg-success text-dark text-white">Processing</span>    
+                        <span *ngIf="Order?.OrderStatus == 3" class="badge bg-info text-dark text-white">Shipped</span>    
+                        <span *ngIf="Order?.OrderStatus == 4" class="badge bg-success text-dark text-white">Paid</span>    
+                        <span *ngIf="Order?.OrderStatus == 5" class="badge bg-danger text-dark text-white">Cancelled</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-2" *ngFor="let order of OrderDetails">
+            <div class="card-body shadow">
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="{{order.ProductImage}}" class="img-fluid rounded-start" alt="Product Image"
+                            style="width: 100px; height: 100px;">
+                        <p class="mb-0">Product name: {{order.ProductName}}</p>
+                        <p class="mb-0">Price (per item): R{{order.Price}}</p>
+                        <p class="mb-0">Quantity: {{order.Quantity}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-2" *ngIf="OrderSummary">
+            <div class="card-body shadow">
+                <div class="row">
+                    <div class="col-md-12">
+                        Total items <strong>{{OrderSummary.TotalItemsSold}}</strong> <br>
+                        Total amount <strong>R{{OrderSummary.TotalRevenue}}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<div *ngIf="isLoading">
+    <div class="text-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+</div>
+</div>
